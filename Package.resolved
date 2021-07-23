@@ -1,0 +1,34 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "ACCoreData",
+        "repositoryURL": "https://github.com/AppCraftTeam/ACCoreData.git",
+        "state": {
+          "branch": null,
+          "revision": "4e6243e6d1621f9d14a8e72c8b1f82e623aa1232",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "ACExtensions",
+        "repositoryURL": "https://github.com/AppCraftTeam/ACExtensions.git",
+        "state": {
+          "branch": null,
+          "revision": "bfaebd56b3c81cf559afed901ddce73bf2d62a55",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "ACNetwork",
+        "repositoryURL": "https://github.com/AppCraftTeam/ACNetwork.git",
+        "state": {
+          "branch": null,
+          "revision": "839e077ddc27e2399c3286863ae47d89f340cee4",
+          "version": "1.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
