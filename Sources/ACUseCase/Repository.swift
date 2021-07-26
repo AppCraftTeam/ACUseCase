@@ -96,22 +96,42 @@ open class Repository: RepositoryInterface {
         }
     }
     
-    open func execute<T: Codable>(_ request: URLRequest, response: T.Type, completion: ((_ result: Any?, _ response: HTTPURLResponse?, _ error: Error?) -> Void)? = nil) {
-        self.remoteInterface.execute(request, model: response) { (result, response, error) in
-            if let arrayResult = result as? [RemoteMappable] {
-                let mappedResult = arrayResult.map({ $0.mapResponseToDomain() })
-                
-                guard let completion = completion else { return }
-                completion(mappedResult, response, error)
-            } else if let singleResult = result as? RemoteMappable {
-                let mappedResult = singleResult.mapResponseToDomain()
-                
-                guard let completion = completion else { return }
-                completion(mappedResult, response, error)
+    @discardableResult
+    open func execute<T: Codable>(_ request: URLRequest, model: T.Type, completion: ((_ result: Any?, _ response: HTTPURLResponse?, _ error: Error?) -> Void)? = nil) -> String {
+        let taskUid = self.remoteInterface.execute(request) { (result, response, error) in
+            if let result = result {
+                do {
+                    let jsonDecoder = JSONDecoder()
+                    let object = try jsonDecoder.decode(model, from: result)
+                    
+                    if let arrayResult = object as? [RemoteMappable] {
+                        let mappedResult = arrayResult.map({ $0.mapResponseToDomain() })
+                        
+                        guard let completion = completion else { return }
+                        completion(mappedResult, response, error)
+                    } else if let singleResult = object as? RemoteMappable {
+                        let mappedResult = singleResult.mapResponseToDomain()
+                        
+                        guard let completion = completion else { return }
+                        completion(mappedResult, response, error)
+                    } else {
+                        guard let completion = completion else { return }
+                        completion(nil, response, error)
+                    }
+                } catch let parsingError {
+                    guard let completion = completion else { return }
+                    completion(nil, response, parsingError)
+                }
             } else {
                 guard let completion = completion else { return }
                 completion(nil, response, error)
             }
         }
+        
+        return taskUid
+    }
+    
+    open func cancel(taskUid: String) {
+        self.remoteInterface.cancel(taskUid)
     }
 }

@@ -18,7 +18,7 @@ let package = Package(
         .package(
             name: "ACNetwork",
             url: "https://github.com/AppCraftTeam/ACNetwork.git",
-            .upToNextMajor(from: "1.0.0")
+            from: "1.0.1"
         ),
         .package(
             name: "ACCoreData",
