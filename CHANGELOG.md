@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.2] - 2022-09-03
+
+### Changed
+- Compatibility: WatchOS 6.0+
+
 ## [1.0.1] - 2021-08-26
 ### Changed
 ##### Execute method

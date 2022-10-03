@@ -7,31 +7,37 @@ let package = Package(
     name: "ACUseCase",
     platforms: [
         .iOS(.v11),
+        .watchOS(.v6),
         .macOS(.v10_12)
     ],
     products: [
         .library(
             name: "ACUseCase",
-            targets: ["ACUseCase"]),
+            targets: ["ACUseCase"]
+        )
     ],
     dependencies: [
         .package(
             name: "ACNetwork",
-            url: "https://github.com/AppCraftTeam/ACNetwork.git",
-            from: "1.0.1"
+            url: "https://github.com/AppCraftTeam/appcraft-network-ios.git",
+            from: "1.0.2"
         ),
         .package(
             name: "ACCoreData",
-            url: "https://github.com/AppCraftTeam/ACCoreData.git",
-            .upToNextMajor(from: "1.0.0")
+            url: "https://github.com/AppCraftTeam/appcraft-core-data-ios.git",
+            from: "1.0.1"
         )
     ],
     targets: [
         .target(
             name: "ACUseCase",
             dependencies: [
-                "ACNetwork",
-                "ACCoreData"
+                "ACCoreData",
+                .product(
+                    name: "ACNetwork",
+                    package: "ACNetwork",
+                    condition: .when(platforms: [.iOS, .macOS])
+                )
             ]
         ),
         .testTarget(
