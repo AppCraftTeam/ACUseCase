@@ -3,7 +3,7 @@
 ## Getting Started
 
 ### Requirements
-- **Platform:** iOS 11 or later
+- **Platform:** iOS 11+, watchOS 6+, macOS 10.12+
 - **Swift version:** Swift 5.x
 
 ### Installation

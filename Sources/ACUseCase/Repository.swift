@@ -5,7 +5,10 @@
 //  Created by AppCraft LLC on 8/23/21.
 //
 
+#if os(iOS)
 import ACNetwork
+#endif
+
 import ACCoreData
 import CoreData
 
@@ -13,10 +16,14 @@ public protocol RepositoryInterface: AnyObject { }
 
 open class Repository: RepositoryInterface {
     
-    // MARK: - Props
+    // MARK: Props
     private var modelName: String
+    
     public lazy var localInterface: LocalWorkerInterface = LocalWorker(modelName: modelName)
+    
+    #if os(iOS)
     public lazy var remoteInterface: RemoteWorkerInterface = RemoteWorker()
+    #endif
     
     open var entityClass: AnyClass {
         NSLog("[\(self)] - Entity class not implemented")
@@ -32,8 +39,6 @@ open class Repository: RepositoryInterface {
     public convenience init() {
         self.init(modelName: "UNKNOWN")
     }
-    
-    // MARK: - RepositoryInterface
     
     // MARK: - Module functions
     open func select(_ request: NSFetchRequest<NSManagedObject>, completion: ((_ result: [AnyObject]?, _ error: Error?) -> Void)? = nil) {
@@ -96,6 +101,7 @@ open class Repository: RepositoryInterface {
         }
     }
     
+    #if os(iOS)
     @discardableResult
     open func execute<T: Codable>(_ request: URLRequest, model: T.Type, completion: ((_ result: Any?, _ response: HTTPURLResponse?, _ error: Error?) -> Void)? = nil) -> String {
         let taskUid = self.remoteInterface.execute(request) { (result, response, error) in
@@ -133,5 +139,12 @@ open class Repository: RepositoryInterface {
     
     open func cancel(taskUid: String) {
         self.remoteInterface.cancel(taskUid)
+    }
+    #endif
+}
+
+extension String {
+    static func className(_ aClass: AnyClass) -> String {
+        NSStringFromClass(aClass).components(separatedBy: ".").last ?? ""
     }
 }
